@@ -1,1 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RDNN — Recurrent RL Trading Agent (Portfolio Page)</title>
+  <meta name="description" content="RDNN: Recurrent PPO/DQN trading agent on raw OHLCV with Crew AI decisioning, backtesting, and end-to-end validation." />
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --panel:#ffffff;
+      --ink:#0f172a;
+      --sub:#475569;
+      --muted:#94a3b8;
+      --brand:#2563eb;
+      --ok:#16a34a;
+      --warn:#b45309;
+      --shadow:0 10px 25px rgba(2,6,23,0.06);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Sego UI,Roboto,Inter,Arial,sans-serif}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px}
+    header{
+      background:linear-gradient(180deg, #f0f5ff, #f6f8fb);
+      border-bottom:1px solid #e2e8f0;
+      position:sticky;top:0;z-index:50
+    }
+    .hero{
+      display:grid;gap:18px;grid-template-columns:1.2fr 0.8fr;align-items:center
+    }
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#e0e7ff;color:#3730a3;font-weight:600;font-size:12px}
+    h1{margin:8px 0 6px 0;font-size:32px;line-height:1.2}
+    p.lead{margin:0;color:var(--sub)}
+    .card{background:var(--panel);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+    section{margin:26px 0}
+    h2{margin:0 0 10px 0;font-size:22px}
+    h3{margin:0 0 8px 0;font-size:18px}
+    .grid{display:grid;gap:18px}
+    .grid.s2{grid-template-columns:repeat(2,1fr)}
+    .grid.s3{grid-template-columns:repeat(3,1fr)}
+    .kpi{display:flex;gap:10px;align-items:center}
+    .kpi b{font-size:22px}
+    table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden}
+    th,td{padding:12px;border-bottom:1px solid #eef2f7;vertical-align:top}
+    th{background:#f8fafc;text-align:left;font-weight:600}
+    tr:hover td{background:#fafcff}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid #e2e8f0;color:#334155}
+    .ok{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+    .warn{background:#fffbeb;color:#92400e;border-color:#fde68a}
+    .imggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .imggrid figure{margin:0}
+    .imggrid img{width:100%;height:220px;object-fit:cover;border-radius:12px;border:1px solid #e5e7eb;box-shadow:var(--shadow)}
+    details{border:1px solid #e2e8f0;border-radius:12px;background:#fff}
+    details>summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none}
+    details[open]>summary{border-bottom:1px solid #e2e8f0}
+    details .content{padding:14px 16px}
+    footer{color:var(--muted);font-size:13px;margin:28px 0 8px 0}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+    @media (max-width:720px){.grid.s2{grid-template-columns:1fr}.grid.s3{grid-template-columns:1fr}.imggrid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap hero">
+      <div>
+        <span class="badge">RDNN • Recurrent RL</span>
+        <h1>Recurrent PPO/DQN Trading Agent on Raw OHLCV</h1>
+        <p class="lead">
+          I framed trading as a reinforcement-learning problem, built a Gym environment over raw OHLCV,
+          integrated an LSTM policy with RecurrentPPO (SB3-Contrib), added a Crew-AI decision layer, and
+          backtested end-to-end. My contributions span environment, policy, training, inference JSON, Crew-AI
+          decisioning, and backtesting glue.
+        </p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Quick Links</h3>
+        <ul style="margin:8px 0 0 18px">
+          <li>Repo: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction" target="_blank" rel="noopener">Chinna-AI-Agent-Stock-Prediction</a></li>
+          <li>Branch/commits: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4?author=ChinnaKummari7" target="_blank" rel="noopener">chinna-sprint4 commits</a></li>
+        </ul>
+        <div style="margin-top:10px;display:grid;gap:6px">
+          <div class="kpi"><b>3</b><span>sprints of build-train-infer</span></div>
+          <div class="kpi"><b>1</b><span>backtest harness (Backtrader)</span></div>
+          <div class="kpi"><b>&lt;1s</b><span>inference JSON target latency</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Sprint Objectives -->
+    <section class="grid s2">
+      <div class="card">
+        <h2>Sprint Objectives (Overview)</h2>
+        <table aria-label="Sprint objectives summary">
+          <thead><tr><th>Sprint</th><th>Objective</th><th>Outcome</th></tr></thead>
+          <tbody>
+            <tr><td>1 — MVP</td><td>Minimal working trading environment</td><td>Gym Env + transaction costs + unit tests</td></tr>
+            <tr><td>2 — Infra/Algo</td><td>LSTM policy + RL wiring</td><td>RNN with DQN/PPO heads + RecurrentPPO pipeline</td></tr>
+            <tr><td>3 — Train & Infer</td><td>Train model and expose inference JSON</td><td>Checkpointing + early stopping + {action_probs} API</td></tr>
+            <tr><td>4 — E2E & Eval</td><td>Crew-AI decision + integration + backtest</td><td>DecisionAgent + integration tests + Backtrader results</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>What I Did (Concise)</h2>
+        <ul style="margin:8px 0 0 18px">
+          <li><b>Env:</b> Implemented <code>gym.Env</code>, rewards with costs/slippage, unit tests.</li>
+          <li><b>Policy & RL:</b> LSTM encoder + DQN/PPO heads; integrated SB3 RecurrentPPO and Eval/Stop callbacks.</li>
+          <li><b>Training:</b> Ran training on historical data; saved best checkpoints.</li>
+          <li><b>Inference:</b> JSON output for <code>{ action_probs }</code>; latency benchmark routine.</li>
+          <li><b>Crew-AI:</b> Prompted probabilities → BUY/SELL/HOLD JSON.</li>
+          <li><b>Backtesting:</b> Signal builder from RL; Backtrader strategy + analyzers (Sharpe/Returns/Drawdown).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- User Story / Tasks (summarized) -->
+    <section class="card">
+      <h2>User Story & Tasks (Summarized)</h2>
+      <p class="lead" style="margin-bottom:12px">Below lists what was delivered per user-story area. Items marked “Not in my scope” were noted but not owned by me this sprint.</p>
+      <table aria-label="Tasks summary">
+        <thead>
+          <tr><th>Area</th><th>Delivered</th><th>Status</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RDNN.1 — Environment</td>
+            <td>Obs windowing, discrete actions, reward (PnL − cost/slippage), unit tests</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-1)</td>
+          </tr>
+          <tr>
+            <td>RDNN.2 — RNN Policy</td>
+            <td>LSTM encoder + DQN head + PPO policy/value heads; forward-pass validation</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-2)</td>
+          </tr>
+          <tr>
+            <td>RDNN.3 — RL Config</td>
+            <td>RecurrentPPO integration; hyperparams; Eval/early-stop callbacks; TB logging</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-2)</td>
+          </tr>
+          <tr>
+            <td>RDNN.4 — Training</td>
+            <td>Historical training runs; periodic eval; checkpointing</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-3)</td>
+          </tr>
+          <tr>
+            <td>RDNN.5 — Inference API</td>
+            <td>Loads policy; returns <code>{action_probs}</code>; latency benchmark utility</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-3)</td>
+          </tr>
+          <tr>
+            <td>RDNN.6 — Crew-AI</td>
+            <td>DecisionAgent that maps probs → BUY/SELL/HOLD JSON</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-4)</td>
+          </tr>
+          <tr>
+            <td>RDNN.7 — Integration</td>
+            <td>E2E test: train → inference → decision; JSON schema/error checks</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-4)</td>
+          </tr>
+          <tr>
+            <td>RDNN.8 — Backtesting</td>
+            <td>Signal builder over sliding windows; Backtrader strategy + analyzers</td>
+            <td><span class="pill ok">Complete</span></td>
+            <td>Implemented by me (Sprint-4)</td>
+          </tr>
+          <tr>
+            <td>Docs/Appendix</td>
+            <td>README updates; sprint logs/appendix pointers</td>
+            <td><span class="pill warn">In progress</span></td>
+            <td>Will expand as repo docs evolve</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Evidence (screens + repo pointer) -->
+    <section class="grid s2">
+      <div class="card">
+        <h2>Screenshots (Key Outputs)</h2>
+        <div class="imggrid" aria-label="Screenshots">
+          <figure>
+            <img src="./1.jpg" alt="Console showing action probabilities and Crew-AI recommendation">
+            <figcaption style="font-size:13px;color:var(--sub);margin-top:6px">Action probs → Crew-AI recommendation</figcaption>
+          </figure>
+          <figure>
+            <img src="./2.jpg" alt="Model training/inference output sample">
+            <figcaption style="font-size:13px;color:var(--sub);margin-top:6px">Training/inference sample output</figcaption>
+          </figure>
+          <figure>
+            <img src="./3.jpg" alt="Backtrader backtest summary with Sharpe, returns, drawdown">
+            <figcaption style="font-size:13px;color:var(--sub);margin-top:6px">Backtest summary (Sharpe/Returns/Drawdown)</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Repository & Code Pointers</h2>
+        <ul style="margin:8px 0 0 18px">
+          <li>Main code (RDNN env, policy, training, inference, Crew-AI): <code>src/UI/rdnn.py</code></li>
+          <li>Backtesting harness: <code>src/Backtesting/backtest_rdnn.py</code></li>
+          <li>Public repo: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+        <p style="color:var(--sub);margin-top:10px">
+          Note: Inference API returns <code>{"action_probs":[p_sell,p_hold,p_buy]}</code>; Crew-AI maps to <code>{"recommendation": "BUY|SELL|HOLD"}</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Appendix -->
+    <section class="card">
+      <h2>Appendix</h2>
+      <details>
+        <summary>Commit References (direct links)</summary>
+        <div class="content">
+          <ul style="margin:6px 0 0 18px">
+            <li>Sprint-1: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commit/b138b79a9f26e1196840df0dd7c70e69a9500612" target="_blank" rel="noopener">b138b79 — RDNN.1 Implement trading environment</a></li>
+            <li>Sprint-2: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commit/c9b5a416e44f95fb2d4d2831bd8f002241407c9d" target="_blank" rel="noopener">c9b5a41 — RDNN.2 & RDNN.3 wiring</a></li>
+            <li>Sprint-3: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commit/05617c1b3e05c27f7b984a9af814b2ea27747864" target="_blank" rel="noopener">05617c1 — RDNN.4 training & RDNN.5 inference</a></li>
+            <li>Sprint-4: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commit/1a9af6882ebe661ce5c08dfe0b80e66e7195f8af" target="_blank" rel="noopener">1a9af68 — Add Crew-AI</a></li>
+            <li>Sprint-4: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commit/e9f341e1a5269ca06b4e0ad9d3c7da3079a1905d" target="_blank" rel="noopener">e9f341e — RDNN backtesting code</a></li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>User Stories (quick reference)</summary>
+        <div class="content">
+          <ul style="margin:6px 0 0 18px">
+            <li>RDNN.1 Environment (obs/action/reward)</li>
+            <li>RDNN.2 RNN Policy (LSTM + DQN/PPO heads)</li>
+            <li>RDNN.3 RL Algorithm (RecurrentPPO integration + callbacks)</li>
+            <li>RDNN.4 Training (eval, checkpoints)</li>
+            <li>RDNN.5 Inference API ({action_probs} JSON, latency)</li>
+            <li>RDNN.6 Crew-AI DecisionAgent (BUY/SELL/HOLD JSON)</li>
+            <li>RDNN.7 Integration & Validation (E2E)</li>
+            <li>RDNN.8 Backtesting & Evaluation (signals → strategy → metrics)</li>
+          </ul>
+          <p style="color:var(--sub);margin-top:8px">Full details are in the repository issues/notes; this page keeps it concise for hiring managers.</p>
+        </div>
+      </details>
+    </section>
+
+    <footer>
+      Built for a portfolio audience: factual, terse, linked to code and outputs.
+    </footer>
+  </main>
+</body>
+</html>
 
