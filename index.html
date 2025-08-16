@@ -47,6 +47,7 @@
     details>summary{cursor:pointer;padding:12px 14px;font-weight:600;list-style:none}
     details[open]>summary{border-bottom:1px solid var(--line)}
     details .content{padding:12px 14px}
+    code{background:#f3f5f8;padding:2px 6px;border-radius:8px}
   </style>
 </head>
 <body>
@@ -191,15 +192,67 @@
       <p class="muted">Inference returns probabilities; the Crew-AI agent emits a single BUY/SELL/HOLD JSON.</p>
     </section>
 
-    <!-- NEW: Commit History (placed right after Code Pointers) -->
-    <section class="card">
+    <!-- Commit History (TABLE) -->
+    <section class="card" id="commit-history">
       <h2>Commit History</h2>
-      <p class="muted">Author-filtered on branch <code>chinna-sprint4</code>. Use these links to browse all changes or file-specific histories.</p>
-      <ul class="tidy">
-        <li><a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4?author=ChinnaKummari7" target="_blank" rel="noopener">All commits — chinna-sprint4 by ChinnaKummari7</a></li>
-        <li><a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4/src/UI/rdnn.py" target="_blank" rel="noopener">File history — <code>src/UI/rdnn.py</code></a></li>
-        <li><a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4/src/Backtesting/backtest_rdnn.py" target="_blank" rel="noopener">File history — <code>src/Backtesting/backtest_rdnn.py</code></a></li>
-      </ul>
+      <p class="muted">Branch: <code>chinna-sprint4</code> • Author: <code>ChinnaKummari7</code></p>
+      <table id="commit-table" aria-label="Commit history">
+        <thead>
+          <tr>
+            <th style="width:180px">Date</th>
+            <th style="width:90px">SHA</th>
+            <th>Message</th>
+            <th style="width:90px">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4" class="muted">Loading from GitHub…</td></tr>
+        </tbody>
+      </table>
+      <script>
+        (async function () {
+          const owner = 'ChinnaKummari7';
+          const repo = 'Chinna-AI-Agent-Stock-Prediction';
+          const branch = 'chinna-sprint4';
+          const author = 'ChinnaKummari7';
+          const url = `https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}&per_page=20&author=${author}`;
+          const tbody = document.querySelector('#commit-table tbody');
+
+          function escapeHtml(s){
+            return String(s).replace(/[&<>"']/g, m => (
+              {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]
+            ));
+          }
+
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('GitHub API error ' + res.status);
+            const data = await res.json();
+            if (!Array.isArray(data) || data.length === 0) {
+              tbody.innerHTML = `<tr><td colspan="4" class="muted">No commits found for this filter. See <a target="_blank" rel="noopener" href="https://github.com/${owner}/${repo}/commits/${branch}?author=${author}">all commits</a>.</td></tr>`;
+              return;
+            }
+            tbody.innerHTML = '';
+            for (const c of data) {
+              const sha = (c.sha || '').substring(0,7);
+              const msg = (c.commit && c.commit.message ? c.commit.message.split('\\n')[0] : '(no message)');
+              const when = (c.commit && c.commit.author && c.commit.author.date) ? new Date(c.commit.author.date) : null;
+              const dateStr = when ? when.toLocaleString(undefined,{year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+              const link = c.html_url || `https://github.com/${owner}/${repo}/commit/${c.sha}`;
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${escapeHtml(dateStr)}</td>
+                <td><code>${escapeHtml(sha)}</code></td>
+                <td>${escapeHtml(msg)}</td>
+                <td><a href="${link}" target="_blank" rel="noopener">view</a></td>
+              `;
+              tbody.appendChild(tr);
+            }
+          } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="4" class="muted">Could not load commits. See <a target="_blank" rel="noopener" href="https://github.com/${owner}/${repo}/commits/${branch}?author=${author}">GitHub commits page</a>.</td></tr>`;
+          }
+        })();
+      </script>
     </section>
 
     <!-- Task hours files -->
