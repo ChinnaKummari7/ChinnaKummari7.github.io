@@ -14,7 +14,6 @@
       --muted:#8a99ab;
       --brand:#2563eb;
       --ok:#15803d;
-      --warn:#b45309;
       --line:#e6eef6;
       --shadow:0 10px 24px rgba(2,6,23,.06);
       --radius:14px;
@@ -25,92 +24,82 @@
     a:hover{text-decoration:underline}
     .wrap{max-width:1100px;margin:0 auto;padding:28px}
     header{background:#eef4ff;border-bottom:1px solid var(--line)}
-    .hero{display:grid;gap:16px;grid-template-columns:1.2fr .8fr;align-items:start}
-    @media (max-width:930px){.hero{grid-template-columns:1fr}}
     h1{margin:8px 0 6px 0;font-size:30px;line-height:1.2}
     p.lead{margin:0;color:var(--sub)}
+    .byline{margin-top:6px;color:#334155;font-weight:600}
     .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
     section{margin:26px 0}
     h2{margin:0 0 10px 0;font-size:22px}
     h3{margin:0 0 8px 0;font-size:18px}
-    .grid{display:grid;gap:18px}
-    .grid.s2{grid-template-columns:repeat(2,1fr)}
-    @media (max-width:820px){.grid.s2{grid-template-columns:1fr}}
     table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden}
     th,td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
     th{background:#f8fbff;text-align:left;font-weight:600}
     tr:hover td{background:#fbfdff}
     .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);color:#334155}
     .ok{background:#ecfdf5;color:#065f46;border-color:#d1fae5}
-    .warn{background:#fffbeb;color:#92400e;border-color:#fde68a}
-    ul.tidy{margin:8px 0 0 18px}
+    .muted{color:var(--muted);font-size:13px}
     .imggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:820px){.imggrid{grid-template-columns:1fr}}
     .imggrid figure{margin:0}
     .imggrid img{width:100%;height:220px;object-fit:cover;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow)}
+    ul.tidy{margin:8px 0 0 18px}
     details{border:1px solid var(--line);border-radius:12px;background:#fff}
     details>summary{cursor:pointer;padding:12px 14px;font-weight:600;list-style:none}
     details[open]>summary{border-bottom:1px solid var(--line)}
     details .content{padding:12px 14px}
-    .muted{color:var(--muted);font-size:13px}
-    .links-list a{display:inline-block;margin:4px 10px 0 0}
   </style>
 </head>
 <body>
 
   <!-- TOP: What this is & what I did (single factual paragraph) -->
   <header>
-    <div class="wrap hero">
-      <div>
-        <h1>RDNN: Recurrent RL Trading Agent on Raw OHLCV</h1>
-        <p class="lead">
-          Project: a Gym-based trading environment using raw OHLCV windows and a recurrent RL policy (RecurrentPPO from SB3-Contrib) to choose SELL/HOLD/BUY.
-          My contributions: built the <strong>gym.Env</strong> with costs/slippage, implemented the <strong>LSTM policy wrapper</strong> and RecurrentPPO wiring,
-          ran <strong>training with evaluation/early-stopping</strong>, exposed an <strong>inference JSON</strong> (<code>{"action_probs":[...]}</code>) with a latency benchmark,
-          integrated a <strong>Crew-AI DecisionAgent</strong> to map probabilities to BUY/SELL/HOLD, and created a <strong>Backtrader</strong> harness to turn model outputs into trades and metrics.
-        </p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">Pointers</h3>
-        <div class="links-list">
-          <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction" target="_blank" rel="noopener">Repository</a>
-          <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4?author=ChinnaKummari7" target="_blank" rel="noopener">Commits (filtered)</a>
-        </div>
-        <p class="muted">Code files referenced below; task-hours files are linked in “Task Hours Files”.</p>
-      </div>
+    <div class="wrap">
+      <h1>RDNN: Recurrent RL Trading Agent on Raw OHLCV</h1>
+      <p class="byline">By: Chinna Babu Kummari</p>
+      <p class="lead">
+        Project: a Gym-based trading environment using raw OHLCV windows and a recurrent RL policy (RecurrentPPO from SB3-Contrib) to choose SELL/HOLD/BUY.
+        My contributions: built the <strong>gym.Env</strong> with costs/slippage, implemented the <strong>LSTM policy wrapper</strong> and RecurrentPPO wiring, ran
+        <strong>training with evaluation/early-stopping</strong>, exposed an <strong>inference JSON</strong> (<code>{"action_probs":[...]}</code>) with a latency benchmark,
+        integrated a <strong>Crew-AI DecisionAgent</strong> that maps probabilities to BUY/SELL/HOLD, and created a <strong>Backtrader</strong> harness to convert model outputs into trades and metrics.
+      </p>
     </div>
   </header>
 
   <main class="wrap">
 
-    <!-- Deeper overview: Sprint objectives summary table -->
+    <!-- Deeper overview: Sprint objectives summary table (with Sprint column) -->
     <section class="card">
       <h2>Deeper Overview — Sprint Objectives (Summary)</h2>
       <table aria-label="Sprint objectives summary">
-        <thead><tr><th>Sprint Goal</th><th>What was targeted</th><th>Result</th></tr></thead>
+        <thead><tr><th>Sprint</th><th>Sprint Goal</th><th>What was targeted</th><th>Result</th></tr></thead>
         <tbody>
           <tr>
+            <td>1</td>
             <td>Minimal Viable Product</td>
-            <td>Basic trading environment, observation windowing, discrete actions, reward = PnL − costs</td>
-            <td><span class="pill ok">Delivered</span> — <code>TradingEnv</code> + unit checks</td>
+            <td>Trading environment with observation windowing, discrete actions, reward = PnL − costs/slippage</td>
+            <td><span class="pill ok">Delivered</span> — <code>TradingEnv</code> + unit checks; ~20h actual vs 9h est. (RDNN.1)</td>
           </tr>
           <tr>
+            <td>2</td>
             <td>Infrastructure Spike</td>
-            <td>LSTM policy integration, SB3-Contrib RecurrentPPO wiring, callbacks for eval/stop</td>
-            <td><span class="pill ok">Delivered</span> — model compiles and forward-passes</td>
+            <td>LSTM policy (DQN/PPO heads) and SB3-Contrib RecurrentPPO integration with Eval/Stop callbacks</td>
+            <td><span class="pill ok">Delivered</span> — RDNN.2 ≈15h (est 7h); RDNN.3 ≈16h (est 8h)</td>
           </tr>
           <tr>
-            <td>Experimental Agent Selection</td>
-            <td>RecurrentPPO as primary; DQN head retained in the network for flexibility</td>
-            <td><span class="pill ok">Delivered</span> — PPO pipeline used for training</td>
+            <td>3</td>
+            <td>Training & Inference</td>
+            <td>Historical training with periodic eval + checkpointing; inference JSON + latency benchmark</td>
+            <td><span class="pill ok">Delivered</span> — RDNN.4 ≈18h (est 9h); RDNN.5 ≈14h (est 7h)</td>
           </tr>
           <tr>
+            <td>4</td>
             <td>Working MVP</td>
-            <td>Inference JSON + Crew-AI decision + backtesting</td>
-            <td><span class="pill ok">Delivered</span> — JSON API, DecisionAgent, Backtrader metrics</td>
+            <td>Crew-AI decision, integration & validation, backtesting and metrics</td>
+            <td><span class="pill ok">Delivered</span> — RDNN.6 ≈12h; RDNN.7 ≈8h; RDNN.8 ≈22h</td>
           </tr>
         </tbody>
       </table>
+      <p class="muted">What I did in each sprint is detailed in the task-hours files linked below.</p>
     </section>
 
     <!-- Summarized User Story / Tasks (quick read, not a data dump) -->
@@ -167,52 +156,45 @@
             <td>Me</td>
             <td><span class="pill ok">Complete</span></td>
           </tr>
-          <tr>
-            <td>Other items</td>
-            <td>Paper/publication (none for this project); extended dashboards (not in scope)</td>
-            <td>Not in my scope</td>
-            <td><span class="pill warn">Not included</span></td>
-          </tr>
         </tbody>
       </table>
-      <p class="muted">Full user stories are placed in the Appendix as a compact list; I did not work on all items listed there.</p>
     </section>
 
-    <!-- Contributions: screenshots + code pointers (not a dump) -->
-    <section class="grid s2">
-      <div class="card">
-        <h2>Key Outputs (Screens)</h2>
-        <div class="imggrid" aria-label="Screenshots">
-          <figure>
-            <img src="./1.jpg" alt="Console showing action probabilities and Crew-AI recommendation">
-            <figcaption class="muted">Action probabilities → Crew-AI decision</figcaption>
-          </figure>
-          <figure>
-            <img src="./2.jpg" alt="Model training/inference console output">
-            <figcaption class="muted">Training / inference sample output</figcaption>
-          </figure>
-          <figure>
-            <img src="./3.jpg" alt="Backtest summary metrics (Sharpe, returns, drawdown)">
-            <figcaption class="muted">Backtest summary (Sharpe/Returns/Drawdown)</figcaption>
-          </figure>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Code Pointers</h2>
-        <ul class="tidy">
-          <li>Main RDNN code (env, policy, training, inference, Crew-AI): <code>src/UI/rdnn.py</code></li>
-          <li>Backtesting harness: <code>src/Backtesting/backtest_rdnn.py</code></li>
-          <li>Repo: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction" target="_blank" rel="noopener">GitHub</a></li>
-          <li>Commits (author-filtered): <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4?author=ChinnaKummari7" target="_blank" rel="noopener">link</a></li>
-        </ul>
-        <p class="muted">The inference API returns probabilities only; Crew-AI maps that to a single recommendation.</p>
+    <!-- Key Outputs (screens) -->
+    <section class="card">
+      <h2>Key Outputs (Screens)</h2>
+      <div class="imggrid" aria-label="Screenshots">
+        <figure>
+          <img src="./1.jpg" alt="Console showing action probabilities and Crew-AI recommendation">
+          <figcaption class="muted">Action probabilities → Crew-AI decision</figcaption>
+        </figure>
+        <figure>
+          <img src="./2.jpg" alt="Model training/inference console output">
+          <figcaption class="muted">Training / inference sample output</figcaption>
+        </figure>
+        <figure>
+          <img src="./3.jpg" alt="Backtest summary metrics (Sharpe, returns, drawdown)">
+          <figcaption class="muted">Backtest summary (Sharpe/Returns/Drawdown)</figcaption>
+        </figure>
       </div>
     </section>
 
-    <!-- Task hours files (as links) -->
+    <!-- Code pointers (moved below Key Outputs) -->
+    <section class="card">
+      <h2>Code Pointers</h2>
+      <ul class="tidy">
+        <li>Main RDNN code (env, policy, training, inference, Crew-AI): <code>src/UI/rdnn.py</code></li>
+        <li>Backtesting harness: <code>src/Backtesting/backtest_rdnn.py</code></li>
+        <li>Repository: <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction" target="_blank" rel="noopener">GitHub</a></li>
+        <li>Commits (author-filtered): <a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4?author=ChinnaKummari7" target="_blank" rel="noopener">link</a></li>
+      </ul>
+      <p class="muted">Inference returns probabilities; the Crew-AI agent emits a single BUY/SELL/HOLD JSON.</p>
+    </section>
+
+    <!-- Task hours files -->
     <section class="card">
       <h2>Task Hours Files</h2>
-      <p class="muted">These are provided as downloadable links. Keep these in the same folder as this HTML (or update the hrefs to your repository locations).</p>
+      <p class="muted">These links should point to files in the same folder as this HTML (or update to your repo paths).</p>
       <ul class="tidy">
         <li><a href="./Kummari Task Hours Sprint 1.docx" download>Task Hours — Sprint 1 (DOCX)</a></li>
         <li><a href="./Kummari Task Hours Sprint 2.docx" download>Task Hours — Sprint 2 (DOCX)</a></li>
@@ -221,25 +203,24 @@
       </ul>
     </section>
 
-    <!-- Appendix: commits, user stories, optional paper -->
+    <!-- Appendix -->
     <section class="card" id="appendix">
       <h2>Appendix</h2>
 
       <details>
-        <summary>Commit References (branch & author filters)</summary>
+        <summary>Commit References</summary>
         <div class="content">
           <p><a href="https://github.com/ChinnaKummari7/Chinna-AI-Agent-Stock-Prediction/commits/chinna-sprint4?author=ChinnaKummari7" target="_blank" rel="noopener">Commits — chinna-sprint4 by ChinnaKummari7</a></p>
-          <p class="muted">Use GitHub’s UI to drill into specific diffs as needed.</p>
+          <p class="muted">Use GitHub’s UI to inspect individual diffs.</p>
         </div>
       </details>
 
       <details style="margin-top:10px">
-        <summary>User Stories (compact list; not all owned by me)</summary>
+        <summary>User Stories</summary>
         <div class="content">
           <ul class="tidy">
             <li>RDNN.1 Implement Trading Environment (obs, actions, reward)</li>
-            <li>RDNN.1.1–1.3 Costs, slippage, unit tests</li>
-            <li>RDNN.2 Build RNN Policy (LSTM + DQN/PPO heads)</li>
+            <li>RDNN.2 Build RNN Policy Network (LSTM + DQN/PPO heads)</li>
             <li>RDNN.3 Configure RL (RecurrentPPO, hyperparams, logging)</li>
             <li>RDNN.4 Train (historical runs, eval, checkpoints)</li>
             <li>RDNN.5 Inference API ({action_probs}, latency)</li>
@@ -247,19 +228,12 @@
             <li>RDNN.7 Integration & Validation (end-to-end)</li>
             <li>RDNN.8 Backtesting & Evaluation (signals → Backtrader → metrics)</li>
           </ul>
-          <p class="muted">Full sprint review materials can be kept in a separate doc if required by the course.</p>
-        </div>
-      </details>
-
-      <details style="margin-top:10px">
-        <summary>Publication</summary>
-        <div class="content">
-          <p>No publication associated with this project.</p>
+          <p class="muted">Full sprint review materials can live in a separate document if required by the course.</p>
         </div>
       </details>
     </section>
 
-    <p class="muted">Last updated: Place this file in your GitHub Pages branch (e.g., <code>main</code> or <code>gh-pages</code>).</p>
+    <p class="muted">Last updated: place this file in your GitHub Pages branch.</p>
   </main>
 </body>
 </html>
